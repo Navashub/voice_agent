@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+langgraph
+langchain
+langchain-openai
+python-dotenv
+twilio
+sqlalchemy
+psycopg2-binary
+chromadb
+websockets
