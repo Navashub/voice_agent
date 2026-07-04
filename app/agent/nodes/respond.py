@@ -1,10 +1,8 @@
-# from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
 
 from app.agent.state import AgentState
 from app.tenants.config_loader import get_tenant_config
 
-# llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.4)
 llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.4)
 
 
@@ -22,6 +20,14 @@ def run(state: AgentState) -> AgentState:
 Caller said: {state["user_input"]}
 
 Relevant information to use in your reply: {grounding}
+
+Rules:
+- Only state facts that appear in the relevant information above.
+- If the relevant information does not answer the caller's question, say
+  clearly that you don't have that information and offer to have someone
+  follow up. Do not guess and do not make up an answer.
+- Never contradict yourself mid-answer. Decide the correct answer first,
+  then say it once, cleanly.
 
 Respond naturally as the receptionist, 2-3 sentences max."""
 

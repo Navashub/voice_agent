@@ -2,3 +2,40 @@
 __pycache__/
 *.pyc
 .venv/
+
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments (cover both naming conventions)
+venv/
+.venv/
+env/
+
+# Vector store / embeddings cache — regenerate from source docs instead
+chroma_store/
+
+# Local data generated at runtime — don't commit real leads/call data
+leads.json
+*.db
+*.sqlite3
+
+# HuggingFace / model cache if it ends up in-project
+.cache/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log

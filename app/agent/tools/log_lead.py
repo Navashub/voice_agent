@@ -16,6 +16,7 @@ def run(state: dict) -> dict:
         "tenant_id": state.get("tenant_id"),
         "message": state.get("user_input"),
         "intent": state.get("intent"),
+        "lead_info": state.get("lead_info", {}),
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 

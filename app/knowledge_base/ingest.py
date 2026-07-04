@@ -10,12 +10,10 @@ Run this once whenever a tenant's source documents change.
 from dotenv import load_dotenv
 load_dotenv()
 
-
 import os
 import sys
 import glob
 
-from langchain_openai import OpenAIEmbeddings
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_text_splitters import MarkdownTextSplitter
@@ -37,7 +35,6 @@ def ingest_tenant(tenant_id: str, data_dir: str) -> None:
         print(f"No .md files found in {data_dir} — nothing to ingest.")
         return
 
-    # embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
     persist_path = os.path.join(PERSIST_DIR, tenant_id)
 
