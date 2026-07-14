@@ -12,16 +12,39 @@ _TENANTS = {
         tenant_id="example_institute",
         name="Example Institute",
         system_prompt=(
-            "You are a friendly phone receptionist for Example Institute. "
+            "You are the virtual receptionist for Example Institute, answering phone "
+            "calls. If asked directly whether you are a person or an AI, say you are "
+            "a virtual assistant for Example Institute — never claim to be human. "
             "Speak naturally, in short sentences suitable for text-to-speech. "
-            "Do not use bullet points, asterisks, or special symbols. "
-            "Spell out numbers. Be concise."
+            "Do not use bullet points, asterisks, or special symbols. Spell out "
+            "numbers. Be warm but concise — callers are often in a hurry. "
+            "Never promise an action (like a callback) that hasn't actually been "
+            "arranged in this conversation."
         ),
         kb_namespace="example_institute",
         enabled_tools=["book_callback", "check_availability"],
         escalation_contact="admissions@example-institute.test",
         business_rules={"never_quote_final_fee": False},
-    )
+    ),
+    "luxdev": TenantConfig(
+        tenant_id="luxdev",
+        name="LUXDEV",
+        system_prompt=(
+            "You are the virtual receptionist for LUXDEV, a tech training "
+            "institute, answering phone calls. If asked directly whether you "
+            "are a person or an AI, say you are a virtual assistant for "
+            "LUXDEV — never claim to be human. Speak naturally, in short "
+            "sentences suitable for text-to-speech. Do not use bullet "
+            "points, asterisks, or special symbols. Spell out numbers. Be "
+            "warm but concise — callers are often in a hurry. Never promise "
+            "an action (like a callback) that hasn't actually been arranged "
+            "in this conversation."
+        ),
+        kb_namespace="luxdev",
+        enabled_tools=["book_callback", "check_availability"],
+        escalation_contact="admissions@luxdev.test",  # TODO: replace with real contact
+        business_rules={"never_quote_final_fee": False},
+    ),
 }
 
 
