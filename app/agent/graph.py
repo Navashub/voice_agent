@@ -12,7 +12,7 @@ def _route_after_classify(state: AgentState) -> str:
         return "tool_call"
     if intent == "escalate":
         return "escalate"
-    return "retrieve"  # "other" falls through to a best-effort informational answer
+    return "respond"  # "other" — greetings/small talk, no KB lookup needed
 
 
 def build_graph():
@@ -35,6 +35,7 @@ def build_graph():
             "retrieve": "retrieve",
             "tool_call": "tool_call",
             "escalate": "escalate",
+            "respond": "respond",
         },
     )
 

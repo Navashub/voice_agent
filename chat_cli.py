@@ -14,7 +14,7 @@ load_dotenv()
 
 from app.agent.graph import build_graph
 
-TENANT_ID = "example_institute"
+TENANT_ID = "luxdev"
 
 
 def fresh_state():
