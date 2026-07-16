@@ -10,8 +10,10 @@ EXTRACT_PROMPT = """Extract any of the following details mentioned in the caller
 - name
 - phone
 - interest (the program/course they're asking about or interested in)
+- preferred_callback_time (when they want a callback, e.g. "tomorrow morning",
+  "this afternoon", "after 5pm" — only if they specify a time preference)
 
-Respond ONLY with a JSON object with keys "name", "phone", "interest".
+Respond ONLY with a JSON object with keys "name", "phone", "interest", "preferred_callback_time".
 Use null for any field not mentioned. No other text, no markdown formatting.
 
 Message: {message}
@@ -33,7 +35,7 @@ def run(state: AgentState) -> AgentState:
         extracted = {}
 
     lead_info = state.get("lead_info") or {}
-    for key in ("name", "phone", "interest"):
+    for key in ("name", "phone", "interest", "preferred_callback_time"):
         value = extracted.get(key)
         if value:
             lead_info[key] = value
