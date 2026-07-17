@@ -19,9 +19,15 @@ LEADS_FILE = "leads.json"
 
 def run(state: dict) -> dict:
     lead_info = state.get("lead_info", {})
+    # Prefer the original message that actually triggered this callback
+    # (set in tool_call.py) over the current turn's input, which by the
+    # time we're logging might just be "0715623803" from confirming a
+    # phone number — not useful on its own in a Leads table.
+    message = lead_info.get("_original_request") or state.get("user_input")
+
     lead = {
         "tenant_id": state.get("tenant_id"),
-        "message": state.get("user_input"),
+        "message": message,
         "intent": state.get("intent"),
         "lead_info": lead_info,
         "timestamp": datetime.now(timezone.utc).isoformat(),

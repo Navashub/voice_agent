@@ -18,6 +18,12 @@ def run(state: AgentState) -> AgentState:
             # Ask for it, and remember we're waiting so the next reply
             # (which may just be digits, not clearly "book_callback"
             # phrasing) still routes back here instead of derailing.
+            # Also remember what actually triggered this, so the eventual
+            # log entry says something more useful than just the digits
+            # the caller reads out to confirm their number.
+            if "_original_request" not in lead_info:
+                lead_info["_original_request"] = state["user_input"]
+
             state["awaiting_phone"] = True
             state["intent"] = "book_callback"
             state["tool_result"] = {
