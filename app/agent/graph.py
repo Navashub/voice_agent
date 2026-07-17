@@ -5,6 +5,12 @@ from app.agent.nodes import classify_intent, extract_lead_info, retrieve, tool_c
 
 
 def _route_after_classify(state: AgentState) -> str:
+    if state.get("awaiting_phone"):
+        # We just asked for a phone number — whatever the caller says next
+        # (often just digits, which won't classify cleanly) goes straight
+        # back to tool_call to check whether we got it.
+        return "tool_call"
+
     intent = state.get("intent")
     if intent == "info_question":
         return "retrieve"
