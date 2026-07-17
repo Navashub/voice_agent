@@ -28,6 +28,7 @@ def fresh_state():
         "response": None,
         "lead_info": {},
         "escalate": False,
+        "awaiting_phone": False,
     }
 
 

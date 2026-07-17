@@ -32,9 +32,15 @@ async def incoming_call(tenant_id: str, request: Request):
         response.hangup()
         return Response(content=str(response), media_type="application/xml")
 
+    form = await request.form()
+    caller_number = form.get("From", "")
+
     host = request.headers.get("host")
     connect = Connect()
-    connect.stream(url=f"wss://{host}/voice/media-stream/{tenant_id}")
+    stream = connect.stream(url=f"wss://{host}/voice/media-stream/{tenant_id}")
+    # Twilio already knows the caller's number (caller ID) — pass it through
+    # so the agent never has to ask for something it can already see.
+    stream.parameter(name="caller_number", value=caller_number)
     response.append(connect)
     return Response(content=str(response), media_type="application/xml")
 

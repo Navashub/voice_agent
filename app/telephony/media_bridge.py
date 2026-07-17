@@ -49,6 +49,7 @@ def fresh_state(tenant_id: str) -> dict:
         "response": None,
         "lead_info": {},
         "escalate": False,
+        "awaiting_phone": False,
     }
 
 
@@ -84,6 +85,12 @@ async def media_stream(websocket: WebSocket, tenant_id: str):
 
             if event == "start":
                 stream_sid = msg["start"]["streamSid"]
+                custom_params = msg["start"].get("customParameters", {})
+                caller_number = custom_params.get("caller_number")
+                if caller_number:
+                    # Real caller ID from Twilio — never ask for a phone
+                    # number we already have.
+                    state["lead_info"]["phone"] = caller_number
 
             elif event == "media":
                 mulaw_chunk = base64.b64decode(msg["media"]["payload"])

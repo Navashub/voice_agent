@@ -24,6 +24,8 @@ class AgentState(TypedDict):
     tool_result: Optional[Dict[str, Any]]
     lead_info: Dict[str, Any]         # accumulated info about the caller (name, phone, interest)
     escalate: bool
+    awaiting_phone: bool               # True when we've asked for a phone number and are
+                                        # waiting on the caller's next reply to contain it
 
     # Output
     response: Optional[str]           # final natural-language reply (goes to TTS in production)
