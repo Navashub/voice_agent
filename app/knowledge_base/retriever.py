@@ -31,10 +31,30 @@ def _get_vectorstore(tenant_id: str) -> Chroma:
     return _vectorstores[tenant_id]
 
 
-def retrieve_context(tenant_id: str, query: str, k: int = 3) -> str:
-    """Returns the top-k relevant chunks joined as a single string, or '' if none found."""
+def retrieve_context(tenant_id: str, query: str, k: int = 3, score_threshold: float = 0.3) -> str:
+    """Returns the top-k *relevant* chunks joined as a string, or '' if none clear the threshold.
+
+    similarity_search alone always returns its top-k matches even when nothing
+    is actually relevant — which meant genuinely unanswerable questions were
+    never being logged as knowledge gaps, since retrieval "succeeded" with
+    irrelevant chunks. This threshold fixes that.
+
+    score_threshold is a starting point, not gospel — print the scores below
+    during testing and adjust if real questions are being wrongly filtered
+    out (threshold too high) or clearly irrelevant chunks are still getting
+    through (threshold too low).
+    """
     vectorstore = _get_vectorstore(tenant_id)
-    docs = vectorstore.similarity_search(query, k=k)
-    if not docs:
-        return ""
-    return "\n\n".join(d.page_content for d in docs)
+
+    try:
+        results = vectorstore.similarity_search_with_relevance_scores(query, k=k)
+    except Exception:
+        # Fallback for any vectorstore/embedding combo that doesn't support
+        # relevance scoring — behave like before rather than crash.
+        docs = vectorstore.similarity_search(query, k=k)
+        return "\n\n".join(d.page_content for d in docs) if docs else ""
+
+    print(f"[retrieval scores] query={query!r} -> {[(round(s, 3)) for _, s in results]}")
+
+    relevant = [doc.page_content for doc, score in results if score >= score_threshold]
+    return "\n\n".join(relevant)
